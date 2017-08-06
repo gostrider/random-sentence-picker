@@ -7,7 +7,7 @@ setup(
     author='gostrider',
     author_email='tiddybeardaywalker@hotmail.com',
     version='0.1',
-    packages=['random-sentence-picker', ],
+    packages=['sentence', ],
     license='Creative Commons Attribution-Noncommercial-Share Alike license',
     long_description=open('README.md').read(),
 )
