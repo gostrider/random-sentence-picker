@@ -156,10 +156,14 @@ def pick_sentence(title, sentences):
     return d(title=title, sentence=choice(sentences))
 
 
-if __name__ == '__main__':
-    url = 'https://www.infoq.com/news/2017/07/ieee-programming-language-rankin'
-    # url = 'https://www.engadget.com/2017/08/04/marcus-hutchins-kronos-malwaretech/'
-    page_content = get_website_content(url)
+def run_picking(website):
+    """
+    Run actual random selecting sentences from website.
+
+    :param website: [String] URL of the website
+    :return: [(String, List[String])] Page title & random picked sentences
+    """
+    page_content = get_website_content(website)
     parsed_content = parse_ascii_sentences(page_content['content'])
     common_words = important_words(parsed_content, spacy.load('en'))
     common_words_count = Counter([word for p in common_words for word in p[0]])
@@ -167,7 +171,12 @@ if __name__ == '__main__':
     words_sentence_pair = list(zip(parsed_sentence, (p[1] for p in common_words)))
     important_words_count = topic_words((p[0] for p in common_words))
     words_only = {word[0] for word in important_words_count}
-    available_sentences = sentences_with_topic_words(words_sentence_pair, words_only)
+    return page_content['title'], sentences_with_topic_words(words_sentence_pair, words_only)
+
+
+if __name__ == '__main__':
+    url = 'some-url'
+    page_title, available_sentences = run_picking(url)
     for _ in range(10):
-        print(pick_sentence(page_content['title'], available_sentences))
+        print(pick_sentence(page_title, available_sentences))
     pass
